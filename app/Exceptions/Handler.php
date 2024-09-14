@@ -8,8 +8,7 @@ use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-
-
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -59,6 +58,20 @@ class Handler extends ExceptionHandler
             return $this -> errorResponse("does not exist any {$modelName} with the specified identifier",404);
         }
 
+        if($exception instanceof AuthenticationException){
+            return $this -> unauthenticated($request,$exception);
+
+
+        }
+
+        if($exception instanceof AuthenticationException){
+            return $this -> errorResponse($exception -> getMessage(),403);
+        }
+
+        if($exception instanceof NotFoundHttpException){
+            return $this -> errorResponse("The Specified URL Cannot be found",404);
+        }
+
         return parent::render($request, $exception);
     }
 
@@ -71,6 +84,9 @@ class Handler extends ExceptionHandler
      */
     protected function unauthenticated($request, AuthenticationException $exception)
     {
+        return $this -> errorResponse('Unauthenticated',401);
+
+
         if ($request->expectsJson()) {
             return response()->json(['error' => 'Unauthenticated.'], 401);
         }
