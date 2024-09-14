@@ -1,6 +1,8 @@
 <?php
 
 namespace App;
+
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
 use Illuminate\Notifications\Notifiable;
@@ -8,7 +10,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
-    use Notifiable;
+    use Notifiable,SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -22,6 +24,7 @@ class User extends Authenticatable
      const ADMIN_USER = 'true';
      const REGULAR_USER = 'false';
      protected $table='users';
+     protected $dates =['deleted_at'];
 
     protected $fillable = [
         'name', 'email', 'password',
