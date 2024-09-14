@@ -8,7 +8,9 @@ use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+
 
 class Handler extends ExceptionHandler
 {
@@ -22,7 +24,7 @@ class Handler extends ExceptionHandler
         \Illuminate\Auth\AuthenticationException::class,
         \Illuminate\Auth\Access\AuthorizationException::class,
         \Symfony\Component\HttpKernel\Exception\HttpException::class,
-        \Illuminate\Database\Eloquent\ModelNotFoundException::class,
+       // \Illuminate\Database\Eloquent\ModelNotFoundException::class,
         \Illuminate\Session\TokenMismatchException::class,
         \Illuminate\Validation\ValidationException::class,
     ];
@@ -66,6 +68,10 @@ class Handler extends ExceptionHandler
 
         if($exception instanceof AuthenticationException){
             return $this -> errorResponse($exception -> getMessage(),403);
+        }
+
+        if($exception instanceof MethodNotAllowedHttpException){
+            return $this -> errorResponse("The Specified Method for your request is invalid",405);
         }
 
         if($exception instanceof NotFoundHttpException){
