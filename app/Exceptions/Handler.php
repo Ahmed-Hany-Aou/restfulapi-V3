@@ -91,11 +91,12 @@ class Handler extends ExceptionHandler
             
            }
         }
+        if(config('app.debug')){
+            return parent::render($request,$exception);
+        }
 
+      return $this -> errorResponse('unexpected Exception. try later',500);
 
-
-
-        return parent::render($request, $exception);
     }
 
     /**
