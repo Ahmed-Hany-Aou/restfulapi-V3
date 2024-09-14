@@ -22,11 +22,11 @@ class SellerController extends ApiController
     }
 
     
-    public function show($id)
+    public function show(Seller $seller)
     {
-        $sellers = Seller::has('products')->findOrFail($id);
+      //  $sellers = Seller::has('products')->findOrFail($id); no need for this line now
       //  return response()->json(['data'=> $sellers],200);
-      return $this->showOne($sellers);
+      return $this->showOne($seller);
     }
 
 }
