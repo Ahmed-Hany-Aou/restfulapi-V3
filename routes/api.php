@@ -33,6 +33,7 @@ Route::resource('users', 'User\UserController', ['except' => ['create', 'edit']]
 Route::resource('categories', 'Category\CategoryController', ['except' => ['create', 'edit']]);
 Route::resource('categories.products', 'Category\CategoryProductController', ['only' => ['index']]);
 Route::resource('categories.sellers', 'Category\CategorySellerController', ['only' => ['index']]);
+Route::resource('categories.transactions', 'Category\CategoryTransactionController', ['only' => ['index']]);
 
 // Products
 Route::resource('products', 'Product\ProductController', ['only' => ['index', 'show']]);
