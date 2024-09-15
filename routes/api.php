@@ -23,8 +23,10 @@ Route::resource('buyers.products', 'Buyer\BuyerProductController', ['only' => ['
 Route::resource('buyers.categories', 'Buyer\BuyerCategoryController', ['only' => ['index']]);
 Route::resource('buyers.transactions', 'Buyer\BuyerTransactionController', ['only' => ['index']]);
 
-//users
+//sellers
+Route::resource('sellers.transactions', 'Seller\SellerTransactionController', ['only' => ['index']]);
 Route::resource('sellers', 'Seller\SellerController', ['only' => ['index', 'show']]);
+//users
 Route::resource('users', 'User\UserController', ['except' => ['create', 'edit']]);
 
 
