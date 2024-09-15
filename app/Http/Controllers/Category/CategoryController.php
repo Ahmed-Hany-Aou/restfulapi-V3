@@ -30,7 +30,14 @@ class CategoryController extends ApiController
      */
     public function store(Request $request)
     {
-        //
+        $rules=[
+            'name'=>'required|unique:categories',// i made it uinque
+            'description'=>'required',
+            ];
+            $this->validate($request,$rules);
+            $newcategory=Category::create($request->all());
+            return $this->showOne($newcategory,201);
+        
     }
 
     /**
@@ -41,7 +48,8 @@ class CategoryController extends ApiController
      */
     public function show(Category $category)
     {
-        //
+        return $this ->showOne($category);
+
     }
 
     
@@ -56,8 +64,17 @@ class CategoryController extends ApiController
      */
     public function update(Request $request, Category $category)
     {
-        //
-    }
+        $category ->fill($request->intersect([
+            'name',
+            'description'
+        ]));
+        if ($category -> isClean()){
+            return response()->json(['error'=>'You need to specify a different value to update'],422);
+            }
+            $category->save();
+            return $this->showOne($category);
+        }
+    
 
     /**
      * Remove the specified resource from storage.
@@ -67,6 +84,7 @@ class CategoryController extends ApiController
      */
     public function destroy(Category $category)
     {
-        //
+        $category -> delete();
+        return $this ->showOne($category);
     }
 }
