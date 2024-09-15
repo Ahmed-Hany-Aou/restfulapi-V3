@@ -30,7 +30,14 @@ class CategoryController extends ApiController
      */
     public function store(Request $request)
     {
-        //
+        $rules=[
+            'name'=>'required|unique:categories',// i made it uinque
+            'description'=>'required',
+            ];
+            $this->validate($request,$rules);
+            $newcategory=Category::create($request->all());
+            return $this->showOne($newcategory,201);
+        
     }
 
     /**
@@ -42,7 +49,7 @@ class CategoryController extends ApiController
     public function show(Category $category)
     {
         return $this ->showOne($category);
-        
+
     }
 
     
