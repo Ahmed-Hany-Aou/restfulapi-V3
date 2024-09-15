@@ -34,3 +34,7 @@ Route::resource('categories', 'Category\CategoryController', ['except' => ['crea
 
 // Products
 Route::resource('products', 'Product\ProductController', ['only' => ['index', 'show']]);
+
+
+// Transactions
+Route::resource('transactions', 'Transaction\TransactionController', ['only' => ['index', 'show']]);
