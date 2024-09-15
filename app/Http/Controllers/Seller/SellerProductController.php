@@ -7,10 +7,8 @@ use App\Seller;
 use App\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController;
-use Illuminate\Support\Facades\Storage;
-use App\Transformers\ProductTransformer;
-use Illuminate\Auth\Access\AuthorizationException;
-use Symfony\Component\HttpKernel\Exception\HttpException;
+
+
 
 class SellerProductController extends ApiController
 {
@@ -31,7 +29,7 @@ class SellerProductController extends ApiController
             'name' => 'required',
             'description' => 'required',
             'quantity' => 'required|integer|min:1',
-           // 'image' => 'required|image', // failed to upload image via post man so i comment this line 
+           'image' => 'required|image', // failed to upload image via post man so i comment this line 
         ];
 
         $this->validate($request, $rules);
@@ -45,5 +43,50 @@ class SellerProductController extends ApiController
         $product = Product::create($data);
 
         return $this->showOne($product);
+    }
+    public function update(Request $request, Seller $seller, Product $product)
+    {
+        $rules = [
+            'quantity' => 'integer|min:1',
+            'status' => 'in:' . Product::AVAILABLE_PRODUCT . ',' . Product::UNAVAILABLE_PRODUCT,
+           'image' => 'image',
+        ];
+
+        $this->validate($request, $rules);
+
+        $this->checkSeller($seller, $product);
+
+        $product->fill($request->intersect([
+            'name',
+            'description',
+            'quantity',
+        ]));
+
+        if ($request->has('status')) {
+            $product->status = $request->status;
+
+            if ($product->isAvailable() && $product->categories()->count() == 0) {
+                return $this->errorResponse('An active product must have at least one category', 409);
+
+            }
+            
+
+        }
+
+        
+         
+        
+
+        if ($product->isClean()) {
+            return $this->errorResponse('You need to specify a different value to update', 422);
+        }
+
+        $product->save();
+
+        return $this->showOne($product);
+    }
+
+    protected function checkSeller(Seller $seller, Product $product)
+    {
     }
 }
