@@ -64,8 +64,17 @@ class CategoryController extends ApiController
      */
     public function update(Request $request, Category $category)
     {
-        //
-    }
+        $category ->fill($request->intersect([
+            'name',
+            'description'
+        ]));
+        if ($category -> isClean()){
+            return response()->json(['error'=>'You need to specify a different value to update'],422);
+            }
+            $category->save();
+            return $this->showOne($category);
+        }
+    
 
     /**
      * Remove the specified resource from storage.
