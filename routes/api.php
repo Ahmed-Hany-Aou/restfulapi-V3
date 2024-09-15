@@ -31,3 +31,6 @@ Route::resource('users', 'User\UserController', ['except' => ['create', 'edit']]
 
 //Categories
 Route::resource('categories', 'Category\CategoryController', ['except' => ['create', 'edit']]);
+
+// Products
+Route::resource('products', 'Product\ProductController', ['only' => ['index', 'show']]);
