@@ -32,7 +32,7 @@ Route::resource('sellers.products', 'Seller\SellerProductController', ['except' 
 Route::resource('sellers', 'Seller\SellerController', ['only' => ['index', 'show']]);
 //users
 Route::resource('users', 'User\UserController', ['except' => ['create', 'edit']]);
-
+Route::name('verify')->get('users/verify/{token}', 'User\UserController@verify');
 
 
 //Categories
